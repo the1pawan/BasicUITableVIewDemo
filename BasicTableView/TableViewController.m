@@ -7,7 +7,7 @@
 //
 
 #import "TableViewController.h"
-
+#import "MovieCell.h"
 @interface TableViewController ()
 
 @end
@@ -27,17 +27,17 @@
 {
     [super viewDidLoad];
     movieArray = [NSArray arrayWithObjects:
-               @"Schindler's List",
-               @"The Godfather",
-               @"Million Dollar Baby",
-               @"Sarfarosh",
-               @"Rang De Basanti ",
-               @"Kal Ho Naa Ho",
-               @"Chak De! India",
-               @"Troy",
-               @"A Beautiful Mind",
-               @"Agneepath",
-               nil];
+                  @"Schindler's List",
+                  @"The Godfather",
+                  @"Million Dollar Baby",
+                  @"Sarfarosh",
+                  @"Rang De Basanti ",
+                  @"Kal Ho Naa Ho",
+                  @"Chak De! India",
+                  @"Troy",
+                  @"A Beautiful Mind",
+                  @"Agneepath",
+                  nil];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -45,6 +45,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 61;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -58,16 +63,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CustomCellIdentifier = @"CustomCellIdentifier ";
+	MovieCell *cell = (MovieCell *)[tableView dequeueReusableCellWithIdentifier: CustomCellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    cell.textLabel.textColor=[UIColor darkGrayColor];
-    cell.textLabel.text = [movieArray objectAtIndex:indexPath.row];
-    // Configure the cell...
-    
+		NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"MovieCell" owner:self options:nil];
+		for (id oneObject in nib) if ([oneObject isKindOfClass:[MovieCell class]])
+			cell = (MovieCell *)oneObject;
+	}
+	
+	cell.MovieName.text=[movieArray objectAtIndex:indexPath.row];
+     NSLog(@" Movie::%@",[movieArray objectAtIndex:indexPath.row]);
+    NSString *imgname=[NSString stringWithFormat:@"%d.jpg",indexPath.row];
+    [cell.MovieImage setImage:[UIImage imageNamed:imgname]];
+	cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 
